@@ -47,3 +47,10 @@
 	line-height: 150px;
 	font-size: 16px;
 }
+
+.btn{
+	padding: 10px 20px;
+	border-radius: 4px;
+	display: inline-block;
+	box-shadow: 0 0 4px #616161;
+}
