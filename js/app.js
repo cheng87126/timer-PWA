@@ -48,4 +48,63 @@
 	function fillZero(num){
 		return num.toString().replace(/^(\d)$/,'0$1')
 	}
+
+	function pickerTime(){
+
+		this.init()
+	}
+	pickerTime.prototype.init = function(){
+		var picker = this.picker = document.createElement('div')
+		picker.classList.add('picker')
+		
+		picker.insertAdjacentHTML('afterbegin',this.renderTitle())
+		picker.insertAdjacentHTML('beforeend',this.renderBody())
+		document.getElementsByTagName('body')[0].appendChild(picker)
+	}
+	pickerTime.prototype.renderTitle = function(){
+		var pickerTitle = '<div class="picker-title">'
+		pickerTitle += '<div class="picker-cancel">cancel</div>'
+		pickerTitle += '<div>请选择时间</div>'
+		pickerTitle += '<div class="picker-sure">sure</div>'
+		pickerTitle += '</div>'
+
+		return pickerTitle
+	}
+	pickerTime.prototype.renderBody = function(){
+		var str = '<div class="picker-body">'
+		str += '<div class="picker-col">'
+		str += this.renderSelect(0,12)
+		str += '</div>'
+		str += '<div class="picker-col">'
+		str += this.renderSelect(0,59)
+		str += '</div>'
+		str += '<div class="picker-col">'
+		str += this.renderSelect(0,59)
+		str += '</div>'
+		str += '</div>'
+
+		return str
+	}
+	pickerTime.prototype.renderSelect = function(start,end){
+		var selectStr = '<ul>'
+		for(var i=start;i<=end;i++){
+			selectStr += '<li>'+fillZero(i)+'</li>'
+		}
+		selectStr += '</ul>'
+		return selectStr
+	}
+	pickerTime.prototype.show = function(){
+		this.picker.classList.add('picker-show')
+	}
+	pickerTime.prototype.hide = function(){
+		this.picker.classList.remove('picker-show')
+	}
+	pickerTime.prototype.toggle = function(){
+		this.picker.classList.toggle('picker-show')
+	}
+
+	var p = new pickerTime()
+	document.querySelector('.setting').addEventListener('click',function(){
+		p.show()
+	},false)
 })()

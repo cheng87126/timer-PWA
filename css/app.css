@@ -1,3 +1,13 @@
+body{
+	margin: 0;
+}
+ul{
+    margin: 0;
+	padding: 0;
+}
+li{
+	list-style: none;
+}
 .circle {
 	width: 200px;
 	height: 200px;
@@ -53,4 +63,42 @@
 	border-radius: 4px;
 	display: inline-block;
 	box-shadow: 0 0 4px #616161;
+}
+.setting{
+	position: absolute;
+	top: calc(50% + 150px);
+	left: 50%;
+	transform: translate(-50%,-50%);
+	font-size: 32px;
+    color: #00aacc;
+    cursor: pointer;
+}
+.picker{
+	width: 100%;
+	height: 40vh;
+	position: fixed;
+	bottom: 0;
+	background-color: #bfbfbf;
+	transform: translateY(0%);	
+	transition: transform 0.1s;
+}
+.picker-show{
+	transform: translateY(0);
+}
+.picker-title{
+	display: flex;
+	padding: 1vh 2vw;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #d9d9d9;
+}
+.picker-body{
+	display: flex;
+}
+.picker-col{
+	flex: 1;
+	text-align: center;
+}
+.picker-col li{
+	height: 5vh;
 }
