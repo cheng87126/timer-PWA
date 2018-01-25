@@ -59,7 +59,16 @@
 		
 		picker.insertAdjacentHTML('afterbegin',this.renderTitle())
 		picker.insertAdjacentHTML('beforeend',this.renderBody())
+		picker.insertAdjacentHTML('beforeend',this.renderLine())
+
 		document.getElementsByTagName('body')[0].appendChild(picker)
+		this.wrapper = document.querySelectorAll('.picker-col')
+		this.itemHeight = document.querySelector('.picker-col li').clientHeight
+		for(var i=0,l=this.wrapper.length;i<l;i++){
+			this.setValue(this.wrapper[i])
+		}
+		
+		this.bindEvent()
 	}
 	pickerTime.prototype.renderTitle = function(){
 		var pickerTitle = '<div class="picker-title">'
@@ -93,6 +102,9 @@
 		selectStr += '</ul>'
 		return selectStr
 	}
+	pickerTime.prototype.renderLine = function(){
+		return '<div class="picker-line"></div>'
+	}
 	pickerTime.prototype.show = function(){
 		this.picker.classList.add('picker-show')
 	}
@@ -101,6 +113,39 @@
 	}
 	pickerTime.prototype.toggle = function(){
 		this.picker.classList.toggle('picker-show')
+	}
+	pickerTime.prototype.setValue = function(col,val){
+		val = val || 0
+		var disY = this.itemHeight * val
+		col.querySelector('ul').style.cssText = 'transform:translateY('+disY+'px)'
+	}
+	pickerTime.prototype.bindEvent = function(){
+		document.querySelector('.picker-cancel').addEventListener('click',function(){
+			console.log('canel')
+		},false)
+		document.querySelector('.picker-sure').addEventListener('click',function(){
+			console.log('sure')
+		},false)
+		var wrapper = this.wrapper
+		for(var i=0,l=wrapper.length;i<l;i++){
+			wrapper[i].addEventListener('mousedown',this.start,false)
+			wrapper[i].addEventListener('mousemove',this.move,false)
+			wrapper[i].addEventListener('mouseup',this.end,false)
+		}
+	}
+	pickerTime.prototype.start = function(e){
+		this.start = e.clientY
+		this.isStart = true
+	}
+	pickerTime.prototype.move = function(e){
+		if(!this.isStart) return
+		var disY = e.clientY - this.start
+		this.querySelector('ul').style.cssText = 'transform:translateY('+disY+'px)'
+	}
+	pickerTime.prototype.end = function(){
+		this.isStart = false
+		// document.removeEventListener('mousemove',this.move,false)
+		// document.removeEventListener('mousedown',this.end,false)
 	}
 
 	var p = new pickerTime()
