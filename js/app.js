@@ -116,15 +116,21 @@
 	}
 	pickerTime.prototype.setValue = function(col,val){
 		val = val || 0
-		var disY = this.itemHeight * val
+		var disY = this.itemHeight * (val + 3)
 		col.querySelector('ul').style.cssText = 'transform:translateY('+disY+'px)'
 	}
 	pickerTime.prototype.bindEvent = function(){
+		var that = this
 		document.querySelector('.picker-cancel').addEventListener('click',function(){
 			console.log('canel')
+			document.querySelector('.picker').classList.remove('picker-show')
 		},false)
 		document.querySelector('.picker-sure').addEventListener('click',function(){
 			console.log('sure')
+			var time = that.getValue()
+			document.getElementById('time').value = time[0] * 60 + (+time[1])
+			btn.click()
+			document.querySelector('.picker-cancel').click()
 		},false)
 		var wrapper = this.wrapper
 		for(var i=0,l=wrapper.length;i<l;i++){
@@ -139,13 +145,43 @@
 	}
 	pickerTime.prototype.move = function(e){
 		if(!this.isStart) return
-		var disY = e.clientY - this.start
-		this.querySelector('ul').style.cssText = 'transform:translateY('+disY+'px)'
+		var disY = e.clientY - this.start,
+			ul = this.querySelector('ul')
+		ul.style.transform = ul.style.transform.replace(/-?\d+/,function(m){
+			return +m + disY
+		})
+		this.start = e.clientY
 	}
 	pickerTime.prototype.end = function(){
 		this.isStart = false
+		var ul = this.querySelector('ul'),
+			li = ul.querySelectorAll('li'),
+			itemHeight = li[0].clientHeight
+		ul.style.transform = ul.style.transform.replace(/-?\d+/,function(m){
+			var idx = 3-Math.round(m / itemHeight)
+			ul.setAttribute('select-idx',idx)
+			for(var i=0,l=li.length;i<l;i++){
+				if(li[i].style.fontSize){
+					li[i].removeAttribute('style')
+					break
+				}
+			}
+			li[idx].style.fontSize = '20px'
+			return Math.round(m / itemHeight) * itemHeight
+		})
 		// document.removeEventListener('mousemove',this.move,false)
 		// document.removeEventListener('mousedown',this.end,false)
+	}
+	pickerTime.prototype.attr = function(el,attr){
+		return el.getAttribute(attr)
+	}
+	pickerTime.prototype.getValue = function(){
+		var ul = document.querySelectorAll('.picker-col ul'),
+			tmpArr = []
+		for(var i=0,l=ul.length;i<l;i++){
+			tmpArr.push(this.attr(ul[i],'select-idx'))
+		}
+		return tmpArr
 	}
 
 	var p = new pickerTime()
